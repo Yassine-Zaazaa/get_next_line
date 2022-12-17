@@ -30,6 +30,8 @@ char	*get_next_line(int fd)
 	static char	*str;
 	int		i;
 
+	if(!str)
+		str = ft_strdup("");
 	if(fd < 0 || fd > 4095 || BUFFER_SIZE < 1)
 		return (NULL);
 	str = get_line(fd, str);
@@ -38,8 +40,8 @@ char	*get_next_line(int fd)
 	i = 0;
 	while(str[i] && str[i] != '\n')
 		i++;
-	if(str[i] == '\n')
-		i++;
+	if(!str[i])
+		i--;
 	line = malloc(sizeof(char) * ++i);
 	if(!line)
 		return (NULL);
@@ -56,7 +58,12 @@ int	main(void)
 	if(!fd)
 		printf("file doesnt exist\n");
 	else
+	{
 		printf("%s\n", get_next_line(fd));
+		printf("%s\n", get_next_line(fd));
+		printf("%s\n", get_next_line(fd));
+		printf("%s\n", get_next_line(fd));	
+	}
 	close(fd);
 	return (0);
 }*/
