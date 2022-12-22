@@ -38,12 +38,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (ret);
 }
 
-char	*ft_free(char *s)
-{
-	free(s);
-	return (NULL);
-}
-
 int	check_str(char *str)
 {
 	int	i;
