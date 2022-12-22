@@ -1,58 +1,28 @@
 #include "get_next_line.h"
 
-char	*read_line(int fd, char *static_str)
-{
-	int	r;
-	char	*tmp;
-	char	*buffer;
-
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if(!buffer)
-		return (NULL);
-	r = 0;
-	if(!static_str)
-		static_str = ft_strdup("");
-	while(!ft_strchr(static_str, '\n'))
-	{
-		r = read(fd, buffer, BUFFER_SIZE);
-		buffer[r] = '\0';
-		if(r == 0)
-			break;
-		tmp = static_str;
-		if(!(static_str = ft_strjoin(static_str, buffer)))
-		{
-			free(tmp);
-			free(buffer);
-			return (NULL);
-		}
-		free(tmp);
-	}
-	free(buffer);
-	return (static_str);
-}
-
 char	*get_next_line(int fd)
 {
-	static char	*static_str;
-	char		*tmp;
-	int		p;
-	char		*line;
+	int	i;
+	char	*line;
+	static char	str[BUFFER_SIZE + 1];
 
-	if(fd < 0 || read(fd, NULL, 0) != 0 || BUFFER_SIZE < 0)
-		return (NULL);
-	static_str = read_line(fd, static_str);
-	p = 0;
-	if(!ft_strchr(static_str, '\n'))
+	i = 1;
+	if(fd < 0 || BUFFER_SIZE < 1)
+		return (0);
+	line = ft_strjoin(0, str);
+	if(check_str(str))
+		return (line);
+	while(i > 0)
 	{
-		free(static_str);
-		return (NULL);
+		i = read(fd, str, BUFFER_SIZE);
+		if(i == -1)
+			return (ft_free(line));
+		if(i == 0 && line[0] == '\0')
+			return (ft_free(line));
+		line = ft_strjoin(line, str);
+		if(check_str(str))
+			break;
 	}
-	p = ft_strchr(static_str, '\n') - static_str;
-	tmp = static_str;
-	line = ft_substr(static_str, 0, p + 1);
-	if(!(static_str = ft_strdup(static_str + p + 1)))
-		return (NULL);
-	free(tmp);
 	return (line);
 }
 /*
