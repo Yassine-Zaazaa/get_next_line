@@ -50,23 +50,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (ret);
 }
 
-char	*ft_strncpy(char *dest, const char *src, size_t n)
-{
-	size_t	i;
-	
-	i = 0;
-	if(!dest)
-		return (NULL);
-	while(i < n && src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	while(i < n)
-		dest[i++] = '\0';
-	return (dest);
-}
-
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	char		*str;
@@ -142,23 +125,4 @@ char	*ft_strdup(const char *s)
 	}
 	str[i] = '\0';
 	return (str);
-}
-
-char	*next_line(char *str)
-{
-	int 	i;
-	char	*ret;
-
-	i = 0;
-	while(str[i] && str[i] != '\n')
-		i++;
-	if(!str[i])
-	{
-		free(str);
-		return (NULL);
-	}
-	i++;
-	ret = ft_substr(str, i, ft_strlen(str) - i);
-	free(str);
-	return (ret);
 }

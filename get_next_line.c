@@ -1,69 +1,67 @@
 #include "get_next_line.h"
 
-char	*get_line(int fd, char *str)
+char	*read_line(int fd, char *static_str)
 {
-	char	*buff;
 	int	r;
+	char	*tmp;
+	char	*buffer;
 
-	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if(!buff)
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if(!buffer)
 		return (NULL);
-	r = 1;
-	while(r && !ft_strchr(str, '\n'))
+	r = 0;
+	if(!static_str)
+		static_str = ft_strdup("");
+	while(!ft_strchr(static_str, '\n'))
 	{
-		r = read(fd, buff, BUFFER_SIZE);
-		if(r == -1)
+		r = read(fd, buffer, BUFFER_SIZE);
+		buffer[r] = '\0';
+		if(r == 0)
+			break;
+		tmp = static_str;
+		if(!(static_str = ft_strjoin(static_str, buffer)))
 		{
-			free(buff);
+			free(tmp);
+			free(buffer);
 			return (NULL);
 		}
-		buff[r] = '\0';
-		str = ft_strjoin(str, buff);
+		free(tmp);
 	}
-	free(buff);
-	return (str);
+	free(buffer);
+	return (static_str);
 }
 
 char	*get_next_line(int fd)
 {
+	static char	*static_str;
+	char		*tmp;
+	int		p;
 	char		*line;
-	static char	*str;
-	int		i;
 
-	if(!str)
-		str = ft_strdup("");
-	if(fd < 0 || fd > 4095 || BUFFER_SIZE < 1)
+	if(fd < 0 || read(fd, NULL, 0) != 0 || BUFFER_SIZE < 0)
 		return (NULL);
-	str = get_line(fd, str);
-	if(!str)
+	static_str = read_line(fd, static_str);
+	p = 0;
+	if(!ft_strchr(static_str, '\n'))
+	{
+		free(static_str);
 		return (NULL);
-	i = 0;
-	while(str[i] && str[i] != '\n')
-		i++;
-	if(!str[i])
-		i--;
-	line = malloc(sizeof(char) * ++i);
-	if(!line)
+	}
+	p = ft_strchr(static_str, '\n') - static_str;
+	tmp = static_str;
+	line = ft_substr(static_str, 0, p + 1);
+	if(!(static_str = ft_strdup(static_str + p + 1)))
 		return (NULL);
-	if(str[i] == '\0')
-		i--;
-	line = ft_strncpy(line, str, i);
-	str = next_line(str);
-	return (line); 	
+	free(tmp);
+	return (line);
 }
 /*
-int	main(void)
+int	main()
 {
-	int	fd = open("s.txt", O_RDONLY);
-	if(!fd)
-		printf("file doesnt exist\n");
-	else
-	{
-		printf("%s\n", get_next_line(fd));
-		printf("%s\n", get_next_line(fd));
-		printf("%s\n", get_next_line(fd));
-		printf("%s\n", get_next_line(fd));	
-	}
-	close(fd);
+	int	fd = open("4lines.txt", O_RDONLY);
+
+	printf("%s\n", get_next_line(fd));
+	printf("%s\n", get_next_line(fd));
+	printf("%s\n", get_next_line(fd));
 	return (0);
 }*/
