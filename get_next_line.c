@@ -1,33 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yzaazaa <yzaazaa@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/18 01:44:53 by yzaazaa           #+#    #+#             */
+/*   Updated: 2023/11/20 22:45:14 by yzaazaa          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 char	*get_next_line(int fd)
 {
-	int	i;
-	char	*line;
-	static char	str[BUFFER_SIZE + 1];
+	static char	buffer[BUFFER_SIZE + 1];
+	char		*line;
+	int			i;
 
-	i = 1;
-	if(fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = ft_strjoin(0, str);
-	if(check_str(str))
+	line = ft_strjoin(NULL, buffer);
+	if (check_str(buffer))
 		return (line);
-	while(i > 0)
+	i = 1;
+	while (i > 0)
 	{
-		i = read(fd, str, BUFFER_SIZE);
-		if(i == -1)
-		{
-			free(line);
-			return (NULL);
-		}
-		if(i == 0 && line[0] == '\0')
-		{
-			free(line);
-			return (NULL);
-		}	
-		line = ft_strjoin(line, str);
-		if(check_str(str))
-			break;
+		i = read(fd, buffer, BUFFER_SIZE);
+		if (i == -1)
+			return (free(line), NULL);
+		if (i == 0 && line[0] == '\0')
+			return (free(line), NULL);
+		line = ft_strjoin(line, buffer);
+		if (check_str(buffer))
+			return (line);
 	}
 	return (line);
 }
