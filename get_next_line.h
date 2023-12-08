@@ -6,7 +6,7 @@
 /*   By: yzaazaa <yzaazaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 23:16:11 by yzaazaa           #+#    #+#             */
-/*   Updated: 2023/11/20 23:04:24 by yzaazaa          ###   ########.fr       */
+/*   Updated: 2023/12/07 23:42:23 by yzaazaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <limits.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 1
 # endif
 
+void	*ft_calloc(size_t count, size_t size);
 size_t	ft_strlen(char *s);
 char	*ft_strjoin(char *s1, char *s2);
 int		check_str(char *str);

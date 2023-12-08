@@ -6,7 +6,7 @@
 /*   By: yzaazaa <yzaazaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 00:37:58 by yzaazaa           #+#    #+#             */
-/*   Updated: 2023/11/20 23:04:53 by yzaazaa          ###   ########.fr       */
+/*   Updated: 2023/12/08 21:34:07 by yzaazaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	ft_strlen(char *s)
 	size_t	len;
 
 	len = 0;
-	while (s && s[len] != 0 && s[len] != '\n')
+	while (s && s[len] && s[len] != '\n')
 		len++;
 	if (s && s[len] == '\n')
 		len++;
@@ -53,7 +53,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!str)
-		return ((free(s1)), NULL);
+		return (free(s1), NULL);
 	i = 0;
 	while (s1 && s1[i])
 	{
@@ -72,4 +72,22 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (s1)
 		free(s1);
 	return (str);
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void			*ret;
+	size_t			i;
+	size_t			final_size;
+	unsigned char	*bytes;
+
+	final_size = count * size;
+	ret = malloc(final_size);
+	if (!ret)
+		return (NULL);
+	bytes = (unsigned char *)ret;
+	i = 0;
+	while (i < final_size)
+		bytes[i++] = 0;
+	return (ret);
 }
