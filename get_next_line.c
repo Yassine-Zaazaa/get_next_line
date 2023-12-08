@@ -6,11 +6,23 @@
 /*   By: yzaazaa <yzaazaa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 01:44:53 by yzaazaa           #+#    #+#             */
-/*   Updated: 2023/12/08 22:16:37 by yzaazaa          ###   ########.fr       */
+/*   Updated: 2023/12/08 22:54:34 by yzaazaa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*check_and_alloc(char *buffer, int fd)
+{
+	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0
+		|| BUFFER_SIZE > INT_MAX || read(fd, buffer, 0) < 0)
+		return (free(buffer), buffer = NULL, NULL);
+	if (!buffer)
+		buffer = ft_calloc(BUFFER_SIZE + 1, 1);
+	if (!buffer)
+		return (NULL);
+	return (buffer);
+}
 
 char	*get_next_line(int fd)
 {
@@ -18,11 +30,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			i;
 
-	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE <= 0
-		|| BUFFER_SIZE > INT_MAX || read(fd, buffer, 0) < 0)
-		return (free(buffer), buffer = NULL, NULL);
-	if (!buffer)
-		buffer = ft_calloc(BUFFER_SIZE + 1, 1);
+	buffer = check_and_alloc(buffer, fd);
 	if (!buffer)
 		return (NULL);
 	line = ft_strjoin(NULL, buffer);
